@@ -1,0 +1,7 @@
+apiVersion: automationcontroller.ansible.com/v1beta1
+kind: AutomationController
+metadata:
+  name: example
+  namespace: ansible-automation-platform
+spec:
+  replicas: 1
