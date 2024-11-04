@@ -1,23 +1,2 @@
-apiVersion: argoproj.io/v1alpha1
 env: dev
-kind: Application
-metadata:
-  name: ansible-automation-platform
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: 'https://your-git-repo-url.git'
-    targetRevision: main
-    path: charts/ansible-automation-platform-operator
-    helm:
-      valueFiles:
-        - values.yaml
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: ansible-automation-platform
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
 

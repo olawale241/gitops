@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ansible-automation-platform
-  namespace: argocd
+  namespace: openshift-gitops
 spec:
   project: default
   source:
