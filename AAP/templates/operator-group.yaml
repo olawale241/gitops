@@ -5,4 +5,4 @@ metadata:
   namespace: ansible-automation-platform
 spec:
   targetNamespaces:
-    - ansible-automation-platform-{{ .values.env }}
+    - ansible-automation-platform
