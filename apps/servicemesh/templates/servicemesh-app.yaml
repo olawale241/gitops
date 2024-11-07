@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ansible-automation-platform
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/alabamadot/openshift-gitops.git'
+    targetRevision: main
+    path: apps/servicemesh-app.yaml
+    helm:
+      valueFiles:
+        - dev-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ansible-automation-platform
+  ignoreDifferences:
+    - group: operators.coreos.com
+      jsonPointers:
+        - /spec/startingCSV
+      kind: Subscription
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 3

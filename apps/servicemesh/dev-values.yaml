@@ -1,0 +1,12 @@
+global:
+  istioNamespace: istio-system
+  enabledNamespaces: [default, my-app]
+tracing:
+  enabled: true
+kiali:
+  enabled: true
+grafana:
+  enabled: true
+prometheus:
+  enabled: true
+
