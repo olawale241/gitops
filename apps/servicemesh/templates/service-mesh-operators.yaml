@@ -3,7 +3,10 @@ kind: OperatorGroup
 metadata:
   name: openshift-operators
   namespace: openshift-operators
-spec: {}
+spec: 
+  targetNamespaces:
+    - ansible-automation-platform
+
 
 ---
 apiVersion: operators.coreos.com/v1alpha1
