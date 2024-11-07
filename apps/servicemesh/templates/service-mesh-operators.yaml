@@ -15,7 +15,8 @@ metadata:
   name: elasticsearch-operator
   namespace: openshift-operators
 spec:
-  channel: stable-5.8
+  channel: stable
+  installPlanApproval: "Automatic"
   name: elasticsearch-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
@@ -28,6 +29,7 @@ metadata:
   namespace: openshift-operators
 spec:
   channel: stable
+  installPlanApproval: "Automatic"
   name: jaeger-product
   source: redhat-operators
   sourceNamespace: openshift-marketplace
@@ -40,6 +42,7 @@ metadata:
   namespace: openshift-operators
 spec:
   channel: stable
+  installPlanApproval: "Automatic"
   name: servicemeshoperator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
@@ -52,6 +55,7 @@ metadata:
   namespace: openshift-operators
 spec:
   channel: stable
+  installPlanApproval: "Automatic"
   name: kiali-ossm
   source: redhat-operators
   sourceNamespace: openshift-marketplace
