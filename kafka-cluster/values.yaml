@@ -1,0 +1,17 @@
+namespace: kafka
+
+kafkaCluster:
+  name: west
+  version: "4.0.0"
+
+replicas:
+  broker: 3
+  controller: 3
+
+storage:
+  size: 20Gi
+
+metrics:
+  entityOperatorConfigMapName: entity-operator-metrics
+  kafkaMetricsConfigMapName: kafka-metrics
+  cruiseControlMetricsConfigMapName: cruise-control-metrics
