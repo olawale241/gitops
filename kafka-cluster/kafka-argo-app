@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kafka-cluster
-  namespace: argocd  # ArgoCD installation namespace
+  namespace: openshift-gitops  # ArgoCD installation namespace
 spec:
   project: default
   source:
