@@ -1,0 +1,31 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argocd-strimzi-full-access
+rules:
+- apiGroups: ["kafka.strimzi.io"]
+  resources:
+    - kafkas
+    - kafkatopics
+    - kafkausers
+    - kafkaconnects
+    - kafkamirrormaker2s
+    - kafkanodepools
+    - kafkabridges
+    - kafkarebalances
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-strimzi-full-access-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argocd-strimzi-full-access
+subjects:
+- kind: ServiceAccount
+  name: argocd-application-controller
+  namespace: openshift-gitops
+
