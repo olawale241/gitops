@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.metrics.cruiseControlMetricsConfigMapName }}
+  namespace: {{ .Values.namespace }}
+data:
+  metrics-config.yaml: |
+    lowercaseOutputName: true
+    rules:
+      - pattern: "kafka.cruisecontrol<name=(.+), type=(.+)><>(Count|Value)"
+        name: kafka_cruisecontrol_$2_$1
+        type: GAUGE
+      - pattern: "kafka.cruisecontrol<type=(.+), name=(.+)><>(Count|Value)"
+        name: kafka_cruisecontrol_$1_$2
+        type: GAUGE

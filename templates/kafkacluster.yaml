@@ -1,0 +1,98 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ .Values.kafkaCluster.name }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+    strimzi.io/node-pools: enabled
+    strimzi.io/kraft: enabled
+spec:
+  kafka:
+    version: {{ .Values.kafkaCluster.version }}
+    authorization
+      type: simple
+    listeners:
+      - name: tls
+        port: 9093
+        type: route
+        tls: true
+        authorization:
+          type: simple
+      - name: plain
+        port: 9092
+        type: internal
+        tls: true
+        authorization:
+          type: simple
+      - name: external
+        port: 9094
+        type: route
+        tls: true
+        authentication:
+          type: tls
+        authorization:
+          type: simple
+      - name: scramext
+        port: 9095
+        type: route
+        tls: true
+        authentication:
+          type: scram-sha-512
+        authorization:
+          type: simple
+    config:
+      default.replication.factor: 3
+      min.insync.replicas: 2
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      unclean.leader.election.enable: true
+      auto.create.topics.enable: true
+      controlled.shutdown.enable: true
+      auto.leader.rebalance.enable: true
+      num.network.threads: 3
+      num.io.threads: 8
+      socket.send.buffer.bytes: 102400
+      socket.receive.buffer.bytes: 102400
+      socket.request.max.bytes: 104857600
+      log.retention.hours: 168
+      log.roll.hours: 168
+      offset.retention.minutes: 10080
+      log.retention.check.interval.ms: 300000
+      authorizer.class.name: kafka.security.authorizer.AclAuthorizer
+      allow.everyone.if.no.acl.found: false
+    metricsConfig:
+      type: jmxPrometheusExporter
+      valueFrom:
+        configMapKeyRef:
+          name: {{ .Values.metrics.kafkaMetricsConfigMapName }}
+          key: kafka-metrics-config.yaml
+
+  cruiseControl:
+    capacity:
+      disk: 20Gi
+      cpuUtilization: 70
+      inboundNetwork: 12582912
+      outboundNetwork: 12582912
+    metricsConfig:
+      type: jmxPrometheusExporter
+      valueFrom:
+        configMapKeyRef:
+          name: {{ .Values.metrics.cruiseControlMetricsConfigMapName }}
+          key: metrics-config.yaml
+
+  entityOperator:
+    topicOperator:
+      metricsConfig:
+        type: jmxPrometheusExporter
+        valueFrom:
+          configMapKeyRef:
+            name: {{ .Values.metrics.entityOperatorConfigMapName }}
+            key: metrics-config.yaml
+    userOperator:
+      metricsConfig:
+        type: jmxPrometheusExporter
+        valueFrom:
+          configMapKeyRef:
+            name: {{ .Values.metrics.entityOperatorConfigMapName }}
+            key: metrics-config.yaml

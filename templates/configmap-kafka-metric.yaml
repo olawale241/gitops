@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.metrics.kafkaMetricsConfigMapName }}
+  namespace: {{ .Values.namespace }}
+data:
+  kafka-metrics-config.yaml: |
+    lowercaseOutputName: true
+    rules:
+      - pattern: "kafka.controller<type=KafkaController, name=(.+)><>Value"
+        name: kraft_controller_$1
+        type: GAUGE
+      - pattern: "kafka.controller<type=ControllerChannelManager, name=QueueSize, broker-id=(\\d+)><>Value"
+        name: kraft_controller_channel_queue_size
+        labels:
+          broker_id: "$1"
+        type: GAUGE
+      - pattern: "kafka.controller<type=ControllerStats, name=(.+)><>Count"
+        name: kraft_controller_stats_$1_total
+        type: COUNTER
+      - pattern: "kafka.controller<type=Partition, name=OfflinePartitionsCount><>Value"
+        name: kraft_offline_partitions_count
+        type: GAUGE
+      - pattern: "kafka.controller<type=Partition, name=PreferredReplicaImbalanceCount><>Value"
+        name: kraft_preferred_replica_imbalance_count
+        type: GAUGE
+      - pattern: "kafka.server<type=ReplicaManager, name=UnderReplicatedPartitions><>Value"
+        name: kafka_under_replicated_partitions
+        type: GAUGE
+      - pattern: "kafka.server<type=ReplicaManager, name=IsrShrinksPerSec><>Count"
+        name: kafka_isr_shrinks_total
+        type: COUNTER
+      - pattern: "kafka.server<type=ReplicaManager, name=IsrExpandsPerSec><>Count"
+        name: kafka_isr_expands_total
+        type: COUNTER
+      - pattern: "kafka.server<type=BrokerTopicMetrics, name=MessagesInPerSec, topic=(.+)><>Count"
+        name: kafka_messages_in_total
+        labels:
+          topic: "$1"
+        type: COUNTER
+      - pattern: "kafka.network<type=RequestMetrics, name=RequestsPerSec, request=(.+)><>Count"
+        name: kafka_request_total
+        labels:
+          request: "$1"
+        type: COUNTER
+      - pattern: "kafka.network<type=RequestMetrics, name=TotalTimeMs, request=(.+)><>Mean"
+        name: kafka_request_time_avg_ms
+        labels:
+          request: "$1"
+        type: GAUGE
+      - pattern: "kafka.log<type=Log, name=Size, topic=(.+), partition=(\\d+)><>Value"
+        name: kafka_log_size_bytes
+        labels:
+          topic: "$1"
+          partition: "$2"
+        type: GAUGE

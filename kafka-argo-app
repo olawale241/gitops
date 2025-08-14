@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kafka-cluster
+  namespace: argocd  # ArgoCD installation namespace
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/olawale241/gitops.git'  # Replace with your Git repo
+    targetRevision: main  # Branch or tag
+    path: '.'  # Path inside repo where Helm chart is located
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kafka
+  syncPolicy:
+    automated:
+      prune: true        # Automatically delete resources no longer defined in Git
+      selfHeal: true     # Automatically correct drift
+    syncOptions:
+      - CreateNamespace=true  # Create namespace if it does not exist
+
