@@ -5,7 +5,7 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Values.kafkaCluster.name }}
 spec:
-  replicas: {{ .Values.kafkaCluster.replicas.broker }}
+  replicas: {{ .Values.replicas.broker }}
   roles:
     - broker
   storage:
@@ -13,7 +13,7 @@ spec:
     volumes:
       - id: 0
         type: persistent-claim
-        size: {{ .Values.kafkaCluster.storage.size }}
+        size: {{ .Values.storage.size }}
         deleteClaim: false
   template:
     pod:
