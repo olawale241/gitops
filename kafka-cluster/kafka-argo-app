@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/olawale241/gitops.git'  # Replace with your Git repo
     targetRevision: main  # Branch or tag
-    path: '.'  # Path inside repo where Helm chart is located
+    path: 'kafka-cluster'  # Path inside repo where Helm chart is located
     helm:
       valueFiles:
         - values.yaml
