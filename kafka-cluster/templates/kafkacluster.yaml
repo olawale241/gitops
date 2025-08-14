@@ -9,7 +9,7 @@ metadata:
 spec:
   kafka:
     version: {{ .Values.kafkaCluster.version }}
-    authorization
+    authorization:
       type: simple
     listeners:
       - name: tls
