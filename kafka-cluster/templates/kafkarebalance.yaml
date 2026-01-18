@@ -1,0 +1,12 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaRebalance
+metadata:
+  name: west-rebalance
+  namespace: kafka
+spec:
+  goals:
+    - RackAwareGoal
+    - DiskCapacityGoal
+    - NetworkInboundCapacityGoal
+    - CpuCapacityGoal
+

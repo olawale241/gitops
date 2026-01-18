@@ -1,0 +1,23 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-broker-autoscaler
+  namespace: kafka
+spec:
+  scaleTargetRef:
+    apiVersion: kafka.strimzi.io/v1beta2
+    kind: KafkaNodePool
+    name: brokers
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 3
+  maxReplicaCount: 6
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-k8s.openshift-monitoring.svc:9090
+        metricName: kafka_bytes_in_total
+        threshold: "50000000"
+        query: |
+          sum(rate(kafka_bytes_in_total[2m]))
+

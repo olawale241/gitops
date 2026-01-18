@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entity-operator-metrics
+  namespace: kafka
+data:
+  metrics-config.yaml: |
+    lowercaseOutputName: true
+    rules:
+      - pattern: ".*"
+        name: entity_operator_metrics
+        type: GAUGE
