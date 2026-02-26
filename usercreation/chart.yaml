@@ -1,0 +1,23 @@
+apiVersion: v2
+name: kafka-users
+description: GitOps-managed Strimzi KafkaUser provisioning with ESO and AWS Secrets Manager
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+keywords:
+  - strimzi
+  - kafka
+  - kafkauser
+  - scram
+  - external-secrets
+  - argocd
+
+maintainers:
+  - name: platform-team
+
+sources:
+  - https://github.com/your-org/kafka-users-gitops
+
+annotations:
+  category: infrastructure

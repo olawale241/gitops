@@ -6,15 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/kafka-users-gitops
+    repoURL: https://github.com/olawale241/gitops.git
     targetRevision: main
-    path: charts/kafka-users
+    path: usercreation
     helm:
       valueFiles:
-        - ../../environments/dev.yaml
+        - usercreation/environments/dev.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: kafka-dev
+    namespace: kafka
   syncPolicy:
     automated:
       prune: true
