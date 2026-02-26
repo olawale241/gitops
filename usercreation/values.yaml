@@ -2,7 +2,7 @@ kafkaCluster:
   name: my-cluster
 
 secretStore:
-  name: aws-secrets
+  name: eso-secrets
   kind: ClusterSecretStore
 
 users: []
