@@ -3,20 +3,20 @@ kafkaCluster:
 
 users:
   - name: dev-producer-app
-    namespace: kafka-dev
+    namespace: kafka
     topic: dev-orders
     group: dev-orders-group
     aclProfile: producer
     awsSecret: kafka/dev/dev-producer-app
 
   - name: dev-consumer-app
-    namespace: kafka-dev
+    namespace: kafka
     topic: dev-orders
     group: dev-orders-group
     aclProfile: consumer
     awsSecret: kafka/dev/dev-consumer-app
 
   - name: dev-admin
-    namespace: kafka-dev
+    namespace: kafka
     aclProfile: admin
     awsSecret: kafka/dev/dev-admin
