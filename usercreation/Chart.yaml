@@ -17,7 +17,7 @@ maintainers:
   - name: platform-team
 
 sources:
-  - https://github.com/your-org/kafka-users-gitops
+  - https://github.com/olawale241/gitops.git
 
 annotations:
   category: infrastructure
