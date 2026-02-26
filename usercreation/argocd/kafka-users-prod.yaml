@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kafka-users-prod
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-org/kafka-users-gitops
+    targetRevision: main
+    path: charts/kafka-users
+    helm:
+      valueFiles:
+        - ../../environments/prod.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kafka-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

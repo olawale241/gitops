@@ -1,0 +1,30 @@
+{{- range .Values.users }}
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    strimzi.io/cluster: {{ $.Values.kafkaCluster.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  authentication:
+    type: scram-sha-512
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: {{ .name }}-scram
+          key: password
+  authorization:
+    type: simple
+    acls:
+{{ include "kafka-users.acls" (dict
+  "aclProfile" .aclProfile
+  "topic" .topic
+  "group" .group
+  "acls" .acls
+  "clusterName" $.Values.kafkaCluster.name
+) | indent 6 }}
+---
+{{- end }}

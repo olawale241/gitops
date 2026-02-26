@@ -1,0 +1,22 @@
+kafkaCluster:
+  name: west
+
+users:
+  - name: dev-producer-app
+    namespace: kafka-dev
+    topic: dev-orders
+    group: dev-orders-group
+    aclProfile: producer
+    awsSecret: kafka/dev/dev-producer-app
+
+  - name: dev-consumer-app
+    namespace: kafka-dev
+    topic: dev-orders
+    group: dev-orders-group
+    aclProfile: consumer
+    awsSecret: kafka/dev/dev-consumer-app
+
+  - name: dev-admin
+    namespace: kafka-dev
+    aclProfile: admin
+    awsSecret: kafka/dev/dev-admin

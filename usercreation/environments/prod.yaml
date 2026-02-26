@@ -1,0 +1,22 @@
+kafkaCluster:
+  name: prod-cluster
+
+users:
+  - name: prod-producer-app
+    namespace: kafka-prod
+    topic: prod-orders
+    group: prod-orders-group
+    aclProfile: producer
+    awsSecret: kafka/prod/prod-producer-app
+
+  - name: prod-consumer-app
+    namespace: kafka-prod
+    topic: prod-orders
+    group: prod-orders-group
+    aclProfile: consumer
+    awsSecret: kafka/prod/prod-consumer-app
+
+  - name: prod-admin
+    namespace: kafka-prod
+    aclProfile: admin
+    awsSecret: kafka/prod/prod-admin

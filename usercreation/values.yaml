@@ -1,0 +1,8 @@
+kafkaCluster:
+  name: my-cluster
+
+secretStore:
+  name: aws-secrets
+  kind: ClusterSecretStore
+
+users: []
