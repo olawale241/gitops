@@ -2,6 +2,13 @@ kafkaCluster:
   name: west
 
 users:
+  - name: user
+    namespace: kafka
+    topic: dev-orders
+    group: dev-orders-group
+    aclProfile: producer
+    awsSecret: kafka/dev/user
+
   - name: dev-producer-app
     namespace: kafka
     topic: dev-orders
