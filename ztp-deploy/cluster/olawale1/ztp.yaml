@@ -1,0 +1,85 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: cluster01-master-0
+  namespace: cluster01
+spec:
+  online: true
+
+  bmc:
+    address: redfish-virtualmedia://192.168.10.20/redfish/v1/Systems/1
+    credentialsName: cluster01-bmc-secret
+
+  bootMACAddress: aa:bb:cc:dd:ee:01
+
+  automatedCleaningMode: metadata
+---
+apiVersion: extensions.hive.openshift.io/v1beta1
+kind: AgentClusterInstall
+metadata:
+  name: cluster01
+  namespace: cluster01
+
+spec:
+  platformType: BareMetal
+
+  clusterDeploymentRef:
+    name: cluster01
+
+  imageSetRef:
+    name: openshift-v4.XX.X
+
+  networking:
+    clusterNetwork:
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+
+    machineNetwork:
+      - cidr: 192.168.10.0/24
+
+    serviceNetwork:
+      - 172.30.0.0/16
+
+  provisionRequirements:
+    controlPlaneAgents: 3
+
+  sshPublicKey: ssh-rsa AAAA...
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: cluster01
+  namespace: cluster01
+
+spec:
+  clusterName: cluster01
+  clusterNamespace: cluster01
+
+  clusterLabels:
+    cloud: auto-detect
+    vendor: auto-detect
+
+  applicationManager:
+    enabled: true
+
+  certPolicyController:
+    enabled: true
+
+  policyController:
+    enabled: true
+
+  searchCollector:
+    enabled: true
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: cluster01
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+  labels:
+    name: cluster01
+    cloud: BareMetal
+    vendor: OpenShift
+spec:
+  hubAcceptsClient: true
