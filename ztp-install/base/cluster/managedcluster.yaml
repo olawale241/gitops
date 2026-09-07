@@ -1,0 +1,15 @@
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+
+metadata:
+  name: ztp3
+
+  labels:
+    name: ztp3
+    ztp: "true"
+    environment: lab
+    vendor: OpenShift
+    cluster.open-cluster-management.io/clusterset: default
+
+spec:
+  hubAcceptsClient: true

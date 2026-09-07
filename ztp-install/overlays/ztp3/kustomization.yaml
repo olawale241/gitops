@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ztp3
+
+resources:
+
+  - ../../base
+  - namespace.yaml
+
+  # NMState
+  - nmstate/master-0.yaml
+  - nmstate/master-1.yaml
+  - nmstate/master-2.yaml
+  - nmstate/worker-0.yaml
+  - nmstate/worker-1.yaml
+  - nmstate/worker-2.yaml
+
+patches:
+
+  - path: cluster-patch.yaml
+
+  - path: master-0-patch.yaml
+  - path: master-1-patch.yaml
+  - path: master-2-patch.yaml
+
+  - path: worker-0-patch.yaml
+  - path: worker-1-patch.yaml
+  - path: worker-2-patch.yaml

@@ -1,0 +1,35 @@
+apiVersion: extensions.hive.openshift.io/v1beta1
+kind: AgentClusterInstall
+
+metadata:
+  name: ztp3
+  namespace: ztp3
+
+spec:
+
+  clusterDeploymentRef:
+    name: ztp3
+  manifestsConfigMapRefs:
+    - name: ztp3-day2-bootstrap
+
+  imageSetRef:
+    name: openshift-4.21
+
+  networking:
+
+    networkType: OVNKubernetes
+
+    clusterNetwork:
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+
+    serviceNetwork:
+      - 172.30.0.0/16
+
+  provisionRequirements:
+
+    controlPlaneAgents: 3
+
+    workerAgents: 3
+
+  sshPublicKey: "CHANGE_ME_SSH_PUBLIC_KEY"

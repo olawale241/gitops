@@ -1,0 +1,11 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+
+metadata:
+  name: ztp3
+
+spec:
+
+  baseDomain: lab.example.com
+
+  clusterName: ztp3
