@@ -1,8 +1,38 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-  - gitops-operator.yaml
-  - vault-secrets-operator.yaml
-  - vault-connection.yaml
-  - day2-application.yaml
+configMapGenerator:
+
+  - name: ztp3-day2-bootstrap
+
+    files:
+
+      # ------------------------------------------------------
+      # Namespace
+      # ------------------------------------------------------
+
+      - 00-namespace.yaml
+
+      # ------------------------------------------------------
+      # Operators
+      # ------------------------------------------------------
+
+      - 10-gitops-operator.yaml
+      - 11-vault-secrets-operator.yaml
+
+      # ------------------------------------------------------
+      # Vault
+      # ------------------------------------------------------
+
+      - 20-vault-connection.yaml
+      - 21-vault-auth.yaml
+      - 22-vault-static-secret.yaml
+
+      # ------------------------------------------------------
+      # Argo CD
+      # ------------------------------------------------------
+
+      - 30-argocd-bootstrap.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

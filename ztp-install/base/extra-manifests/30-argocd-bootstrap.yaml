@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: ztp3-cluster-config
+  namespace: openshift-gitops
+
+spec:
+
+  project: default
+
+  source:
+    repoURL: https://github.com/CHANGE_ME/cluster-config.git
+    targetRevision: main
+
+    # ========================================================
+    # CHANGE THIS TO THE DIRECTORY IN cluster-config
+    # THAT REPRESENTS ZTP3
+    # ========================================================
+
+    path: overlays/ztp3
+
+  destination:
+    server: https://kubernetes.default.svc
+
+    # The Application itself manages resources in the
+    # spoke cluster.
+    namespace: openshift-gitops
+
+  syncPolicy:
+
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

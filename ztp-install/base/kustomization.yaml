@@ -3,22 +3,49 @@ kind: Kustomization
 
 resources:
 
-  # Cluster
+  # ==========================================================
+  # CLUSTER
+  # ==========================================================
+
   - cluster/agentclusterinstall.yaml
   - cluster/infraenv.yaml
   - cluster/managedcluster.yaml
   - cluster/klusterletaddonconfig.yaml
 
-  # Secrets
-  - secrets/bmc-secret.yaml
-  - secrets/pull-secret.yaml
+  # ==========================================================
+  # PROVISIONING VAULT
+  #
+  # These resources run on the ACM HUB.
+  #
+  # They generate:
+  #
+  #   Secret/pull-secret
+  #   Secret/bmc-credentials
+  #
+  # before the Agent/BMH installation begins.
+  # ==========================================================
 
-  # Control plane
-  - baremetalhosts/control-plane/master-0.yaml
-  - baremetalhosts/control-plane/master-1.yaml
-  - baremetalhosts/control-plane/master-2.yaml
+  - secrets/provisioning-vault-connection.yaml
+  - secrets/provisioning-vault-auth.yaml
+  - secrets/provisioning-vault-secrets.yaml
 
-  # Workers
-  - baremetalhosts/workers/worker-0.yaml
-  - baremetalhosts/workers/worker-1.yaml
-  - baremetalhosts/workers/worker-2.yaml
+  # ==========================================================
+  # BARE METAL HOSTS
+  # ==========================================================
+
+  - ../baremetalhost/control-plane/master-0.yaml
+  - ../baremetalhost/control-plane/master-1.yaml
+  - ../baremetalhost/control-plane/master-2.yaml
+
+  - ../baremetalhost/workers/worker-0.yaml
+  - ../baremetalhost/workers/worker-1.yaml
+  - ../baremetalhost/workers/worker-2.yaml
+
+  # ==========================================================
+  # EXTRA MANIFEST CONFIGMAP
+  #
+  # AgentClusterInstall consumes this ConfigMap and installs
+  # the contents into the NEW spoke cluster.
+  # ==========================================================
+
+  - extra-manifests

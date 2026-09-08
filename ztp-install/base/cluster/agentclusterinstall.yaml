@@ -9,6 +9,15 @@ spec:
 
   clusterDeploymentRef:
     name: ztp3
+
+  # ==========================================================
+  # DAY-2 BOOTSTRAP MANIFESTS
+  #
+  # This ConfigMap exists on the HUB.
+  # AgentClusterInstall injects its contents into the
+  # installation of the SPOKE.
+  # ==========================================================
+
   manifestsConfigMapRefs:
     - name: ztp3-day2-bootstrap
 
@@ -29,7 +38,6 @@ spec:
   provisionRequirements:
 
     controlPlaneAgents: 3
-
     workerAgents: 3
 
   sshPublicKey: "CHANGE_ME_SSH_PUBLIC_KEY"
