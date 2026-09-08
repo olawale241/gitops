@@ -1,0 +1,26 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ztp3-master-2
+  namespace: ztp3
+  labels:
+    node-role.kubernetes.io/master: ""
+    node-role.kubernetes.io/control-plane: ""
+    infraenvs.agent-install.openshift.io: ztp3
+
+spec:
+  online: true
+
+  bootMode: UEFI
+
+  bootMACAddress: CHANGE_ME
+
+  bmc:
+    address: CHANGE_ME
+    credentialsName: bmc-credentials
+    disableCertificateVerification: true
+
+  automatedCleaningMode: disabled
+
+  rootDeviceHints:
+    deviceName: /dev/sda
