@@ -1,0 +1,178 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-bootstrap-script
+  namespace: ztp3
+data:
+  bootstrap.sh: |
+    #!/bin/bash
+
+    set -euo pipefail
+
+    CLUSTER_NAME="${CLUSTER_NAME}"
+    SPOKE_NAMESPACE="${CLUSTER_NAME}"
+
+    echo "========================================="
+    echo " Vault Bootstrap"
+    echo " Cluster: ${CLUSTER_NAME}"
+    echo "========================================="
+
+    echo "Waiting for ManagedCluster ${CLUSTER_NAME}..."
+
+    until oc get managedcluster "${CLUSTER_NAME}" >/dev/null 2>&1; do
+      echo "ManagedCluster not found yet..."
+      sleep 30
+    done
+
+    echo "ManagedCluster exists."
+
+    echo "Waiting for ManagedCluster to become Available..."
+
+    until oc get managedcluster "${CLUSTER_NAME}" \
+      -o jsonpath='{.status.conditions[?(@.type=="ManagedClusterConditionAvailable")].status}' \
+      | grep -q True; do
+
+      echo "Spoke cluster is not Ready yet..."
+      sleep 30
+    done
+
+    echo "Spoke cluster is Available."
+
+    echo "Looking for spoke admin kubeconfig..."
+
+    KUBECONFIG_SECRET=""
+
+    until [ -n "${KUBECONFIG_SECRET}" ]; do
+
+      KUBECONFIG_SECRET=$(
+        oc get secret -n "${CLUSTER_NAME}" \
+        -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' \
+        | grep -E 'admin-kubeconfig$' \
+        | head -1 || true
+      )
+
+      if [ -z "${KUBECONFIG_SECRET}" ]; then
+        echo "Spoke kubeconfig not available yet..."
+        sleep 30
+      fi
+    done
+
+    echo "Using kubeconfig Secret: ${KUBECONFIG_SECRET}"
+
+    oc get secret "${KUBECONFIG_SECRET}" \
+      -n "${CLUSTER_NAME}" \
+      -o jsonpath='{.data.kubeconfig}' \
+      | base64 -d > /tmp/spoke-kubeconfig
+
+    export KUBECONFIG=/tmp/spoke-kubeconfig
+
+    echo "Testing connection to spoke..."
+
+    until oc get clusterversion >/dev/null 2>&1; do
+      echo "Spoke API not ready..."
+      sleep 30
+    done
+
+    echo "Spoke API is ready."
+
+    echo "Creating provisioning ServiceAccount..."
+
+    oc get namespace "${SPOKE_NAMESPACE}" >/dev/null 2>&1 || \
+      oc create namespace "${SPOKE_NAMESPACE}"
+
+    oc get serviceaccount provisioning-vault \
+      -n "${SPOKE_NAMESPACE}" >/dev/null 2>&1 || \
+      oc create serviceaccount provisioning-vault \
+        -n "${SPOKE_NAMESPACE}"
+
+    echo "ServiceAccount provisioning-vault exists."
+
+    echo "========================================="
+    echo " Configuring Vault"
+    echo "========================================="
+
+    VAULT_ROLE="${CLUSTER_NAME}-provisioning"
+    VAULT_POLICY="${CLUSTER_NAME}-provisioning"
+    VAULT_PATH="acm/${CLUSTER_NAME}"
+
+    export VAULT_ADDR="${VAULT_ADDR}"
+    export VAULT_TOKEN="${VAULT_TOKEN}"
+
+    echo "Creating Vault policy..."
+
+    cat > /tmp/policy.json <<EOF
+    {
+      "policy": "path \"${VAULT_PATH}/*\" {\n  capabilities = [\"read\"]\n}\n"
+    }
+    EOF
+
+    curl -ksS \
+      --fail \
+      --header "X-Vault-Token: ${VAULT_TOKEN}" \
+      --request PUT \
+      --data @/tmp/policy.json \
+      "${VAULT_ADDR}/v1/sys/policies/acl/${VAULT_POLICY}"
+
+    echo "Vault policy ${VAULT_POLICY} created/updated."
+
+    echo "Configuring JWT role..."
+
+    cat > /tmp/role.json <<EOF
+    {
+      "role": "${VAULT_ROLE}",
+      "user_claim": "sub",
+      "bound_audiences": [
+        "vault"
+      ],
+      "bound_claims": {
+        "sub": "system:serviceaccount:${SPOKE_NAMESPACE}:provisioning-vault"
+      },
+      "policies": [
+        "${VAULT_POLICY}"
+      ],
+      "ttl": "1h",
+      "max_ttl": "24h"
+    }
+    EOF
+
+    curl -ksS \
+      --fail \
+      --header "X-Vault-Token: ${VAULT_TOKEN}" \
+      --request POST \
+      --data @/tmp/role.json \
+      "${VAULT_ADDR}/v1/auth/jwt/role/${VAULT_ROLE}"
+
+    echo "Vault JWT role ${VAULT_ROLE} created/updated."
+
+    echo "========================================="
+    echo " Creating VaultAuth on spoke"
+    echo "========================================="
+
+    cat <<EOF | oc apply -f -
+    apiVersion: secrets.hashicorp.com/v1beta1
+    kind: VaultAuth
+    metadata:
+      name: provisioning-vault-auth
+      namespace: ${SPOKE_NAMESPACE}
+    spec:
+      method: jwt
+      mount: jwt
+      vaultConnectionRef: provisioning-vault
+      jwt:
+        role: ${VAULT_ROLE}
+        serviceAccount: provisioning-vault
+        audiences:
+          - vault
+    EOF
+
+    echo "VaultAuth created."
+
+    echo "========================================="
+    echo " Vault Bootstrap Complete"
+    echo "========================================="
+
+    echo "Cluster:       ${CLUSTER_NAME}"
+    echo "Vault Path:    ${VAULT_PATH}"
+    echo "Vault Policy:  ${VAULT_POLICY}"
+    echo "Vault Role:    ${VAULT_ROLE}"
+    echo "ServiceAccount: provisioning-vault"

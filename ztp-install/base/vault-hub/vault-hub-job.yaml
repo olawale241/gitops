@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-bootstrap
+  namespace: ztp3
+spec:
+  backoffLimit: 10
+
+  template:
+    metadata:
+      labels:
+        app: vault-bootstrap
+
+    spec:
+      serviceAccountName: vault-bootstrap
+
+      restartPolicy: OnFailure
+
+      containers:
+        - name: vault-bootstrap
+          image: quay.io/openshift/origin-cli:4.20
+
+          env:
+            - name: CLUSTER_NAME
+              value: "ztp3"
+
+            - name: VAULT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  name: vault-bootstrap-credentials
+                  key: VAULT_ADDR
+
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault-bootstrap-credentials
+                  key: VAULT_TOKEN
+
+          command:
+            - /bin/bash
+            - /opt/bootstrap/bootstrap.sh
+
+          volumeMounts:
+            - name: bootstrap-script
+              mountPath: /opt/bootstrap
+
+      volumes:
+        - name: bootstrap-script
+          configMap:
+            name: vault-bootstrap-script
+            defaultMode: 0755
