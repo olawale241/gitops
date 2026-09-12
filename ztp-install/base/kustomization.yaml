@@ -34,13 +34,13 @@ resources:
   # BARE METAL HOSTS
   # ==========================================================
 
-  - ../baremetalhost/control-plane/master-0.yaml
-  - ../baremetalhost/control-plane/master-1.yaml
-  - ../baremetalhost/control-plane/master-2.yaml
+  - baremetalhosts/control-plane/master-0.yaml
+  - baremetalhosts/control-plane/master-1.yaml
+  - baremetalhosts/control-plane/master-2.yaml
 
-  - ../baremetalhost/workers/worker-0.yaml
-  - ../baremetalhost/workers/worker-1.yaml
-  - ../baremetalhost/workers/worker-2.yaml
+  - baremetalhosts/workers/worker-0.yaml
+  - baremetalhosts/workers/worker-1.yaml
+  - baremetalhosts/workers/worker-2.yaml
 
   # ==========================================================
   # EXTRA MANIFEST CONFIGMAP
