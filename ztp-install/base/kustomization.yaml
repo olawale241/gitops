@@ -8,10 +8,10 @@ resources:
   # ==========================================================
 
   - cluster/agentclusterinstall.yaml
+  - cluster/clusterdeployment.yaml
   - cluster/infraenv.yaml
   - cluster/managedcluster.yaml
   - cluster/klusterletaddonconfig.yaml
-  - cluster/clusterdeployment.yaml
 
   # ==========================================================
   # PROVISIONING VAULT
@@ -50,3 +50,17 @@ resources:
   # ==========================================================
 
   - extra-manifests
+
+
+  # ==========================================================
+  # vault-hub set up 
+  #
+  # ==========================================================
+
+  - vault-hub/vault-hub-clusterrolebinding.yaml
+  - vault-hub/vault-hub-job.yaml
+  - vault-hub/vault-hub-sa.yaml
+  - vault-hub/vault-hub-clusterrole.yaml
+  - vault-hub/vault-hub-secret.yaml
+  - vault-hub/vault-hub-configmap.yaml
+
