@@ -1,0 +1,18 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ove604m1
+  namespace: ztp3
+spec:
+  online: true
+
+  bootMACAddress: "00:50:56:ab:c3:c7"
+
+  bmc:
+    address: "redfish-virtualmedia://192.168.1.183:8000/redfish/v1/Systems/422bbe08-4149-0286-b95e-d29542fd7540"
+    credentialsName: ztp3-bmc-credentials
+    disableCertificateVerification: true
+
+  bootMode: UEFI
+
+  automatedCleaningMode: disabled

@@ -2,26 +2,28 @@ apiVersion: hive.openshift.io/v1
 kind: ClusterDeployment
 
 metadata:
-  name: ztp3
-  namespace: ztp3
+  name: cluster
+  namespace: cluster
 
 spec:
-
   baseDomain: example.com
-
-  clusterName: ztp3
 
   clusterInstallRef:
     group: extensions.hive.openshift.io
     kind: AgentClusterInstall
-    name: ztp3
+    name: cluster
     version: v1beta1
+
+  clusterName: cluster
 
   controlPlaneConfig:
     servingCertificates: {}
 
   platform:
-    agentBareMetal: {}
+    agentBareMetal:
+      agentSelector:
+        matchLabels:
+          cluster: cluster
 
   pullSecretRef:
     name: pull-secret

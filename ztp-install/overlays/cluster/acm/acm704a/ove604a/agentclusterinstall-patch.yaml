@@ -1,0 +1,14 @@
+apiVersion: extensions.hive.openshift.io/v1beta1
+kind: AgentClusterInstall
+metadata:
+  name: ove604a
+  namespace: ove604a
+
+spec:
+  clusterDeploymentRef:
+    name: ove604a
+
+  sshPublicKey: "<YOUR_SSH_PUBLIC_KEY>"
+
+  manifestsConfigMapRefs:
+    - name: ove604a-vault-bootstrap

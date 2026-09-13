@@ -1,0 +1,17 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: ove604w1
+  namespace: ztp3
+  labels:
+    node-role.kubernetes.io/worker: ""
+spec:
+  online: true
+
+  bmc:
+    address: redfish://192.168.1.183:8000/redfish/v1/Systems/422bbe5a-f3b5-1103-21a3-2e90f280bf2a
+    credentialsName: ove604w1-bmc
+
+  bootMACAddress: "00:50:56:ab:ef:44"
+
+  automatedCleaningMode: metadata

@@ -1,0 +1,11 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: ove604a
+  namespace: ove604a
+
+spec:
+  clusterName: ove604a
+
+  agentClusterInstallRef:
+    name: ove604a

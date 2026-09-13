@@ -2,22 +2,19 @@ apiVersion: agent-install.openshift.io/v1beta1
 kind: InfraEnv
 
 metadata:
-  name: ztp3
-  namespace: ztp3
+  name: cluster
+  namespace: cluster
 
 spec:
-
   clusterRef:
-    name: ztp3
-    namespace: ztp3
-
-  cpuArchitecture: x86_64
+    name: cluster
+    namespace: cluster
 
   pullSecretRef:
     name: pull-secret
 
-  sshAuthorizedKey: "CHANGE_ME_SSH_PUBLIC_KEY"
+  sshAuthorizedKey: "<YOUR_SSH_PUBLIC_KEY>"
 
   nmStateConfigLabelSelector:
     matchLabels:
-      ztp3-nmstate: "true"
+      cluster: cluster

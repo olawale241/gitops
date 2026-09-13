@@ -2,10 +2,10 @@ apiVersion: cluster.open-cluster-management.io/v1
 kind: ManagedCluster
 
 metadata:
-  name: ztp3
+  name: cluster
 
   labels:
-    name: ztp3
+    name: cluster
     ztp: "true"
     environment: lab
     vendor: OpenShift

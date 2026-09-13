@@ -5,7 +5,7 @@ namespace: ztp3
 
 resources:
 
-  - ../../base
+  - ../../../../base
   - namespace.yaml
 
   # NMState

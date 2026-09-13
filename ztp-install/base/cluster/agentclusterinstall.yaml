@@ -2,32 +2,20 @@ apiVersion: extensions.hive.openshift.io/v1beta1
 kind: AgentClusterInstall
 
 metadata:
-  name: ztp3
-  namespace: ztp3
+  name: cluster
+  namespace: cluster
 
 spec:
-
   clusterDeploymentRef:
-    name: ztp3
-
-  # ==========================================================
-  # DAY-2 BOOTSTRAP MANIFESTS
-  #
-  # This ConfigMap exists on the HUB.
-  # AgentClusterInstall injects its contents into the
-  # installation of the SPOKE.
-  # ==========================================================
+    name: cluster
 
   manifestsConfigMapRefs:
-    - name: ztp3-day2-bootstrap
+    - name: cluster-day2-bootstrap
 
   imageSetRef:
     name: openshift-4.21
 
   networking:
-
-    networkType: OVNKubernetes
-
     clusterNetwork:
       - cidr: 10.128.0.0/14
         hostPrefix: 23
@@ -36,8 +24,7 @@ spec:
       - 172.30.0.0/16
 
   provisionRequirements:
-
     controlPlaneAgents: 3
     workerAgents: 3
 
-  sshPublicKey: "CHANGE_ME_SSH_PUBLIC_KEY"
+  sshPublicKey: "<YOUR_SSH_PUBLIC_KEY>"

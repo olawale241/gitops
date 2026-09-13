@@ -1,0 +1,10 @@
+apiVersion: agent-install.openshift.io/v1beta1
+kind: InfraEnv
+metadata:
+  name: ove604a
+  namespace: ove604a
+
+spec:
+  clusterRef:
+    name: ove604a
+    namespace: ove604a

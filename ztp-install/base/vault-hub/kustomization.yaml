@@ -7,7 +7,6 @@ resources:
   - vault-hub-clusterrolebinding.yaml
   - vault-hub-sa.yaml
   - vault-hub-clusterrole.yaml
-  - vault-bootstrap-secret.yaml
   - vault-hub-configmap.yaml
   - vault-hub-job.yaml
   - vault-hub-secret.yaml

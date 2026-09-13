@@ -1,12 +1,11 @@
 apiVersion: agent.open-cluster-management.io/v1
 kind: KlusterletAddonConfig
-
 metadata:
-  name: cluster
-  namespace: cluster
+  name: ove604a
+  namespace: ove604a
 
 spec:
-  clusterName: cluster
+  clusterName: ove604a
 
   applicationManager:
     enabled: true
